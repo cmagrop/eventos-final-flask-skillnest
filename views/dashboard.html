@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Eventos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Bienvenido/a, {{ session['nombre'] }}</h1>
+        <div>
+            <a href="/eventos/nuevo" class="btn btn-primary me-2">Crear Evento</a>
+            <a href="/logout" class="btn btn-outline-danger">Cerrar Sesión</a>
+        </div>
+    </div>
+    <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Nombre del Evento</th>
+                <th>Fecha de Evento</th>
+                <th>Ubicación</th>
+                <th>Anfitrión</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for evento in eventos %}
+            <tr>
+                <td><a href="/eventos/{{ evento.id }}">{{ evento.nombre_evento }}</a></td>
+                <td>{{ evento.fecha_evento }}</td>
+                <td>{{ evento.ubicacion }}</td>
+                <td>{{ evento.nombre_anfitrion }} {{ evento.apellido_anfitrion }}</td>
+                <td>
+                    {% if evento.usuario_id == session['usuario_id'] %}
+                        <a href="/eventos/{{ evento.id }}/editar" class="btn btn-sm btn-warning">Editar</a>
+                        <form action="/eventos/{{ evento.id }}/eliminar" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Desea eliminar el evento?')">Eliminar</button>
+                        </form>
+                    {% elif evento.id in ids_eventos_unidos %}
+                        <a href="/eventos/{{ evento.id }}/abandonar" class="btn btn-sm btn-secondary">Cancelar</a>
+                    {% else %}
+                        <a href="/eventos/{{ evento.id }}/unirse" class="btn btn-sm btn-success">Unirse</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

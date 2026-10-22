@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Evento</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Editar Evento</h2>
+        <a href="/eventos" class="btn btn-secondary">Volver</a>
+    </div>
+    {% for msg in get_flashed_messages(category_filter=['error_evento']) %}
+        <div class="alert alert-danger col-md-6">{{ msg }}</div>
+    {% endfor %}
+    <form action="/eventos/{{ evento.id if evento.id else evento['id'] }}/editar" method="POST" class="col-md-6">
+        <div class="mb-3">
+            <label class="form-label">Nombre Evento:</label>
+            <input type="text" name="nombre_evento" value="{{ evento.nombre_evento if evento.nombre_evento else evento['nombre_evento'] }}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Ubicación:</label>
+            <input type="text" name="ubicacion" value="{{ evento.ubicacion if evento.ubicacion else evento['ubicacion'] }}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Fecha:</label>
+            <input type="date" name="fecha_evento" value="{{ evento.fecha_evento if evento.fecha_evento else evento['fecha_evento'] }}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Detalles:</label>
+            <textarea name="detalles" class="form-control" rows="4">{{ evento.detalles if evento.detalles else evento['detalles'] }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-warning">Guardar Evento</button>
+    </form>
+</body>
+</html>
